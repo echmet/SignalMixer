@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CropScaleWidget</class>
+ <widget class="QWidget" name="CropScaleWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>433</width>
+    <height>366</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QGroupBox" name="qgbox_crop">
+       <property name="title">
+        <string>Crop</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="2" column="1">
+         <widget class="QDoubleSpinBox" name="qdspbox_cropFrom">
+          <property name="decimals">
+           <number>4</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="ql_cropEnabled">
+          <property name="text">
+           <string>Enabled</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QDoubleSpinBox" name="qdspbox_cropTo"/>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="ql_prepend">
+          <property name="text">
+           <string>Prepend</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="ql_append">
+          <property name="text">
+           <string>Append</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QDoubleSpinBox" name="qdspbox_prepend"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="ql_cropFrom">
+          <property name="text">
+           <string>From</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QCheckBox" name="qcb_cropTo">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QCheckBox" name="qcb_cropFrom">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="ql_cropTo">
+          <property name="text">
+           <string>To</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QDoubleSpinBox" name="qdspbox_append"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="qgbox_scale">
+       <property name="title">
+        <string>Scale</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0" colspan="3">
+         <widget class="QCheckBox" name="qcb_enableScaling">
+          <property name="text">
+           <string>Enable scaling</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QDoubleSpinBox" name="qdspbox_scaleFrom"/>
+        </item>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="qpb_resetScaleFrom">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QDoubleSpinBox" name="qdspbox_scaleTo"/>
+        </item>
+        <item row="3" column="2">
+         <widget class="QPushButton" name="qpb_resetScaleTo">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="ql_scaleTo">
+          <property name="text">
+           <string>To</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="ql_scaleFrom">
+          <property name="text">
+           <string>From</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
