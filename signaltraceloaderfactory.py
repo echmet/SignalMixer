@@ -1,5 +1,5 @@
 import platform
-from signaltrace import SignalTrace
+from signaltrace import SignalTrace, InvalidSignalError
 from signaltraceloader import SignalTraceLoaderError
 import signaltraceloaderdbus
 import signaltraceloaderlocalsocket
@@ -34,6 +34,9 @@ class SignalTraceLoaderDelegate(QObject):
                     self.signalLoaded.emit(sig)
         except SignalTraceLoaderError as ex:
             mbox = QMessageBox(QMessageBox.Critical, 'Failed to load signal', str(ex))
+            mbox.exec_()
+        except InvalidSignalError as ex:
+            mbox = QMessageBox(QMessageBox.Critical, 'Loaded signal is invalid', str(ex))
             mbox.exec_()
 
     signalLoaded = pyqtSignal(SignalTrace)
