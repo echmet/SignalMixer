@@ -55,14 +55,14 @@ def convertToCommonX(datapoints, xUnit):
 
 def checkSignalValid(datapoints):
     if len(datapoints) < 2:
-        raise InvalidSignalError
+        raise InvalidSignalError('Not enough datapoints')
 
     for idx in range(1, len(datapoints) - 1):
         p = datapoints[idx - 1]
         q = datapoints[idx]
 
         if q.x <= p.x:
-            raise InvalidSignalError
+            raise InvalidSignalError('X axis is not monotonic')
 
 
 class SignalTrace:
