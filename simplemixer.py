@@ -56,7 +56,6 @@ class SimpleMixer(abstractmixer.AbstractMixer):
                         if Xpts[pos] != pt.x:
                             Xpts.insert(pos, pt.x)
 
-        
         cocktail = []
         for x in Xpts:
             yVals = []
