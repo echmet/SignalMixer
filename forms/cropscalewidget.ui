@@ -37,7 +37,11 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QDoubleSpinBox" name="qdspbox_cropTo"/>
+         <widget class="QDoubleSpinBox" name="qdspbox_cropTo">
+          <property name="decimals">
+           <number>4</number>
+          </property>
+         </widget>
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="ql_prepend">
@@ -54,7 +58,11 @@
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QDoubleSpinBox" name="qdspbox_prepend"/>
+         <widget class="QDoubleSpinBox" name="qdspbox_prepend">
+          <property name="decimals">
+           <number>4</number>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="ql_cropFrom">
@@ -85,7 +93,11 @@
          </widget>
         </item>
         <item row="5" column="1">
-         <widget class="QDoubleSpinBox" name="qdspbox_append"/>
+         <widget class="QDoubleSpinBox" name="qdspbox_append">
+          <property name="decimals">
+           <number>4</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -104,7 +116,11 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QDoubleSpinBox" name="qdspbox_scaleFrom"/>
+         <widget class="QDoubleSpinBox" name="qdspbox_scaleFrom">
+          <property name="decimals">
+           <number>4</number>
+          </property>
+         </widget>
         </item>
         <item row="2" column="2">
          <widget class="QPushButton" name="qpb_resetScaleFrom">
@@ -114,7 +130,11 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QDoubleSpinBox" name="qdspbox_scaleTo"/>
+         <widget class="QDoubleSpinBox" name="qdspbox_scaleTo">
+          <property name="decimals">
+           <number>4</number>
+          </property>
+         </widget>
         </item>
         <item row="3" column="2">
          <widget class="QPushButton" name="qpb_resetScaleTo">
