@@ -55,12 +55,13 @@ class SignalItem(QWidget, Ui_SignalItem):
         self._cropScaleWidget = CropScaleWidget(xFirst, xLast, yZero, xStep, self)
         self._widthHinter = SignalItem.WidthHinter(self.font())
 
+        self.setMinimumWidth(self._widthHinter.width())
+
         self.qle_dataSource.setText(dataSrc)
         self.qle_dataID.setText(dataID)
         self.qle_customID.setText(customID)
 
         self.layout().addWidget(self._cropScaleWidget)
-        self.layout().addStretch()
 
         self._cropScaleWidget.collapse()
         self.qpb_collapseExpandButton.setState(ui.collapseexpandbutton.State.COLLAPSED)
@@ -74,21 +75,6 @@ class SignalItem(QWidget, Ui_SignalItem):
     @staticmethod
     def getMinimumWidth():
         return SignalItem.WidthHinter(QLineEdit().font()).width()
-
-    def minimumHeight(self):
-        h = self.qle_dataID.minimumSizeHint().height()
-        return 6 * h
-
-    def minimumWidth(self):
-        return self._widthHinter.width()
-
-    def minimumSizeHint(self):
-        w = self.minimumWidth()
-        h = self.minimumHeight() + self._croppingControlsHeight()
-        return QSize(w, h)
-
-    def sizeHint(self):
-        return self.minimumSizeHint()
 
     customIDChanged = pyqtSignal(str, str)
     heightChanged = pyqtSignal()
