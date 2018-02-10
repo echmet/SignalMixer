@@ -32,7 +32,7 @@ class Ui_MainForm(object):
         self.qscrArea_addedSignals.setSizePolicy(sizePolicy)
         self.qscrArea_addedSignals.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.qscrArea_addedSignals.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.qscrArea_addedSignals.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.qscrArea_addedSignals.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
         self.qscrArea_addedSignals.setWidgetResizable(False)
         self.qscrArea_addedSignals.setObjectName("qscrArea_addedSignals")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()

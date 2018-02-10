@@ -27,8 +27,6 @@ class AddedSignalsWidget(QWidget):
         self.resize(self.minimumSizeHint())
 
     def minimumSizeHint(self):
-        print('Getting size hint for AddedSignalsWidget')
-
         w = QWidget.sizeHint(self).width()
         h = 0
         for idx in range(0, self.layout().count()):
@@ -38,7 +36,6 @@ class AddedSignalsWidget(QWidget):
             h += wg.sizeHint().height()
             w = wg.sizeHint().width()
 
-        print('MSH {} {}'.format(w, h))
         return QSize(w, h)
 
     def sizeHint(self):
