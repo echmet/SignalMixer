@@ -6,6 +6,9 @@ from cropscalepack import CropScalePack
 
 
 class CropScaleWidget(QWidget, Ui_CropScaleWidget):
+    def _minimumHeight(self):
+        return 12 * self.qdspbox_scaleTo.sizeHint().height()
+
     @pyqtSlot()
     def _onCropFromCheckboxToggled(self):
         sender = self.sender()
@@ -125,8 +128,10 @@ class CropScaleWidget(QWidget, Ui_CropScaleWidget):
         self.qgbox_crop.setVisible(False)
         self.qgbox_scale.setVisible(False)
         self.isCollapsed = True
+        self.setMinimumHeight(0)
 
     def expand(self):
         self.qgbox_crop.setVisible(True)
         self.qgbox_scale.setVisible(True)
         self.isCollapsed = False
+        self.setMinimumHeight(self._minimumHeight())

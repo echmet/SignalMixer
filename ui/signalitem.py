@@ -19,7 +19,7 @@ class SignalItem(QWidget, Ui_SignalItem):
     def _croppingControlsHeight(self):
         if self._cropScaleWidget.isCollapsed:
             return 0
-        return self._cropScaleWidget.height()
+        return self._cropScaleWidget.minimumHeight()
 
     @pyqtSlot(ui.collapseexpandbutton.Transition)
     def _onCollapseExpand(self, trans):
@@ -60,6 +60,7 @@ class SignalItem(QWidget, Ui_SignalItem):
         self.qle_customID.setText(customID)
 
         self.layout().addWidget(self._cropScaleWidget)
+        self.layout().addStretch()
 
         self._cropScaleWidget.collapse()
         self.qpb_collapseExpandButton.setState(ui.collapseexpandbutton.State.COLLAPSED)
