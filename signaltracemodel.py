@@ -35,6 +35,9 @@ class SignalTraceModel(QObject):
             sig.setScaling(pack.scaleFrom, pack.scaleTo)
 
     def allSignals(self):
+        if len(self._storedSignals) < 1:
+            raise SignalTraceModelError('No signals')
+
         ret = dict(self._storedSignals)
         return ret
 

@@ -1,4 +1,5 @@
 import simplemixer
+import simpleinterpolatingmixer
 
 
 class NoSuchMixerError(Exception):
@@ -16,9 +17,10 @@ class SignalMixerFactory:
         mixers = {}
 
         def _add(m):
-            mixers[m.shortName()] = m;
+            mixers[m.shortName()] = m
 
         _add(simplemixer.SimpleMixer())
+        _add(simpleinterpolatingmixer.SimpleInterpolatingMixer())
 
         return mixers
 

@@ -65,10 +65,12 @@ class MainWindow(QWidget, Ui_MainForm):
             writer = csvcocktailwriter.CSVCocktailWriter()
             writer.write(header, cocktail, outputPath)
             self._lastOutputPath = os.path.realpath(os.path.dirname(outputPath))
-        except signalmixerfactory.NoSuchSignalError as ex:
+        except SignalTraceModelError:
+            pass
+        except signalmixerfactory.NoSuchMixerError as ex:
             mbox = QMessageBox(QMessageBox.Critical, 'Unable to mix signals', str(ex))
             mbox.exec_()
-        except abstractcocktailwriter as ex:
+        except abstractcocktailwriter.CocktailWriterError as ex:
             mbox = QMessageBox(QMessageBox.Warning, 'Unable to write mixed signals', str(ex))
             mbox.exec_()
 

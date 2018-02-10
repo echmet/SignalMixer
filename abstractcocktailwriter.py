@@ -9,6 +9,7 @@ class CocktailWriterError(Exception):
     def __str__(self):
         return self._message
 
+
 class AbstractCocktailWriter(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def write(self, header, cocktail, target):
