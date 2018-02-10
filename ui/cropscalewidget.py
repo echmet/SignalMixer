@@ -63,6 +63,7 @@ class CropScaleWidget(QWidget, Ui_CropScaleWidget):
     def __init__(self, xFirst, xLast, yZero, xStep, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+        self.isCollapsed = False
 
         self._defaultXFirst = xFirst
         self._defaultXLast = xLast
@@ -123,7 +124,9 @@ class CropScaleWidget(QWidget, Ui_CropScaleWidget):
     def collapse(self):
         self.qgbox_crop.setVisible(False)
         self.qgbox_scale.setVisible(False)
+        self.isCollapsed = True
 
     def expand(self):
         self.qgbox_crop.setVisible(True)
         self.qgbox_scale.setVisible(True)
+        self.isCollapsed = False

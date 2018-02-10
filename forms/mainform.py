@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainform.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.10
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -25,23 +25,23 @@ class Ui_MainForm(object):
         self.qhlay_mainPanel = QtWidgets.QHBoxLayout()
         self.qhlay_mainPanel.setObjectName("qhlay_mainPanel")
         self.qscrArea_addedSignals = QtWidgets.QScrollArea(MainForm)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(1)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.qscrArea_addedSignals.sizePolicy().hasHeightForWidth())
         self.qscrArea_addedSignals.setSizePolicy(sizePolicy)
         self.qscrArea_addedSignals.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.qscrArea_addedSignals.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        self.qscrArea_addedSignals.setWidgetResizable(True)
+        self.qscrArea_addedSignals.setWidgetResizable(False)
         self.qscrArea_addedSignals.setObjectName("qscrArea_addedSignals")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 228, 703))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 460, 703))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.qscrArea_addedSignals.setWidget(self.scrollAreaWidgetContents)
         self.qhlay_mainPanel.addWidget(self.qscrArea_addedSignals)
         self.qtabw_signalsViews = QtWidgets.QTabWidget(MainForm)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(3)
+        sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.qtabw_signalsViews.sizePolicy().hasHeightForWidth())
         self.qtabw_signalsViews.setSizePolicy(sizePolicy)
@@ -67,7 +67,7 @@ class Ui_MainForm(object):
         self.verticalLayout.addLayout(self.horizontalLayout_2)
 
         self.retranslateUi(MainForm)
-        self.qtabw_signalsViews.setCurrentIndex(0)
+        self.qtabw_signalsViews.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainForm)
 
     def retranslateUi(self, MainForm):

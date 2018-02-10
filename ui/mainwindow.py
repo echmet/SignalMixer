@@ -181,7 +181,6 @@ class MainWindow(QWidget, Ui_MainForm):
         xStep = sig.averageXStep()
 
         sigItem = SignalItem(identifier, sig.srcFile, sig.dataID, sig.customID, xFirst, xLast, yZero, xStep, self)
-        self._addedSigsWidget.setSizePolicy(QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred))
         self._addedSigsWidget.addItem(sigItem)
 
         self._singleSignalPlot.setDisplay(sig.xTitle, sig.yTitle, sig.xUnit, sig.yUnit, sig.sourceSignal(), sig.transformedSignal())
