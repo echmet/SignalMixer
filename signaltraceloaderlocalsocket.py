@@ -135,12 +135,15 @@ class SignalTraceLoaderLocalSocket(SignalTraceLoader):
         if length < 1:
             return ''
 
-        packing = '={}b'.format(length)
+        packing = '={}B'.format(length)
         data = self._readBlock(packing)
 
         byteSeq = bytearray()
         for b in data:
-            byteSeq.append(b)
+            try:
+                byteSeq.append(b)
+            except ValueError:
+                raise CommunicationError('Invalid byte value. Got {}, must be in range (0, 256)'.format(b))
 
         return byteSeq.decode('UTF-8')
 
