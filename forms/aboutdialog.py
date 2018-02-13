@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'aboutdialog.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.10
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -47,6 +47,10 @@ class Ui_AboutDialog(object):
         self.ql_echmetLogo.setAlignment(QtCore.Qt.AlignCenter)
         self.ql_echmetLogo.setObjectName("ql_echmetLogo")
         self.verticalLayout.addWidget(self.ql_echmetLogo)
+        self.ql_echmetLink = QtWidgets.QLabel(AboutDialog)
+        self.ql_echmetLink.setAlignment(QtCore.Qt.AlignCenter)
+        self.ql_echmetLink.setObjectName("ql_echmetLink")
+        self.verticalLayout.addWidget(self.ql_echmetLink)
         spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem1)
         self.buttonBox = QtWidgets.QDialogButtonBox(AboutDialog)
@@ -64,4 +68,5 @@ class Ui_AboutDialog(object):
         self.ql_versionCaption.setText(_translate("AboutDialog", "Version: "))
         self.ql_versionTag.setText(_translate("AboutDialog", "<PLACEHOLDER>"))
         self.ql_echmetLogo.setText(_translate("AboutDialog", "<ECHMET_LOGO>"))
+        self.ql_echmetLink.setText(_translate("AboutDialog", "<ECHMET_LINK>"))
 
