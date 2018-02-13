@@ -15,6 +15,7 @@ setup(
     'include_files': [],
     'excludes': ["tkinter"],
     'include_msvcr': True,
+	'optimize': 2
 }},
 executables = [Executable("themixer.py",base="Win32GUI")]
 )
