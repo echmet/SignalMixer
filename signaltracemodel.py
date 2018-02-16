@@ -2,6 +2,11 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject
 import signaltrace
 import hashlib
 from cropscalepack import CropScalePack
+import random
+
+
+def randomString():
+    return str(random.getrandbits(128))
 
 
 class SignalTraceModelError(Exception):
@@ -58,7 +63,11 @@ class SignalTraceModel(QObject):
     @pyqtSlot(signaltrace.SignalTrace)
     def onSignalLoaded(self, sig):
         m = hashlib.sha256()
-        m.update(sig.srcFile.encode('UTF-8'))
+        if len(sig.srcFile) < 1:
+            m.update(randomString().encode('ASCII'))
+        else:
+            m.update(sig.srcFile.encode('UTF-8'))
+
         m.update(sig.dataID.encode('UTF-8'))
         identifier = m.hexdigest()
 
@@ -72,5 +81,5 @@ class SignalTraceModel(QObject):
 
         self._storedSignals[identifier] = sig
         self.signalLoaded.emit(sig, identifier)
- 
+
     signalLoaded = pyqtSignal(signaltrace.SignalTrace, str)
