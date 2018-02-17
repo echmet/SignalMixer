@@ -80,7 +80,6 @@ class SignalTrace:
 
         self._avgSR = len(self._srcDatapoints) / (self._srcDatapoints[-1].x - self._srcDatapoints[0].x)
         self._YRange = calcYRange(self._srcDatapoints)
-        print(self._avgSR)
 
         self._cropFrom = self._srcDatapoints[0].x
         self._cropTo = self._srcDatapoints[-1].x
