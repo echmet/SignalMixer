@@ -5,10 +5,6 @@ from cropscalepack import CropScalePack
 import random
 
 
-def randomString():
-    return str(random.getrandbits(128))
-
-
 class SignalTraceModelError(Exception):
     def __init__(self, message):
         super().__init__()
@@ -52,6 +48,12 @@ class SignalTraceModel(QObject):
 
         return self._storedSignals[identifier]
 
+    def randomString(self):
+        while True:
+            rs = str(random.getrandbits(128))
+            if rs not in self._storedSignals:
+                return rs
+
     def removeSignal(self, identifier):
         if identifier in self._storedSignals:
             del self._storedSignals[identifier]
@@ -64,7 +66,7 @@ class SignalTraceModel(QObject):
     def onSignalLoaded(self, sig):
         m = hashlib.sha256()
         if len(sig.srcFile) < 1:
-            m.update(randomString().encode('ASCII'))
+            m.update(self.randomString().encode('ASCII'))
         else:
             m.update(sig.srcFile.encode('UTF-8'))
 
