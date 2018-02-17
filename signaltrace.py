@@ -1,4 +1,3 @@
-import math
 from signaltracescaler import SignalTraceScaler
 from datapoint import Datapoint
 import xunitguesser
