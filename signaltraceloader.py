@@ -33,4 +33,3 @@ class SignalTraceLoader(metaclass=abc.ABCMeta):
     def launchService(self):
         self._loaderLauncher.launch()
 
-
