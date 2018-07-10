@@ -44,8 +44,6 @@ class CropScaleWidget(QWidget, Ui_CropScaleWidget):
             fv = self.qdspbox_scaleFrom.value()
             tv = self.qdspbox_scaleTo.value()
 
-            print(fv, tv, shift)
-
             self.qdspbox_scaleFrom.setValue(fv + shift)
             self.qdspbox_scaleTo.setValue(tv + shift)
             self.qcb_enableScaling.setChecked(True)

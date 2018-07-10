@@ -134,7 +134,7 @@ class SignalTrace:
 
     def setCropTo(self, xTo):
         if xTo <= self._cropFrom:
-            raise InvalidSignalTraceCropError
+            xTo = self._cropFrom
 
         self._cropTo = xTo
 
