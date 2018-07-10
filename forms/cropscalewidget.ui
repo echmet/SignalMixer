@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>433</width>
-    <height>372</height>
+    <height>405</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,7 @@
         <item row="2" column="1">
          <widget class="QDoubleSpinBox" name="qdspbox_cropFrom">
           <property name="decimals">
-           <number>4</number>
+           <number>5</number>
           </property>
          </widget>
         </item>
@@ -39,7 +39,7 @@
         <item row="3" column="1">
          <widget class="QDoubleSpinBox" name="qdspbox_cropTo">
           <property name="decimals">
-           <number>4</number>
+           <number>5</number>
           </property>
          </widget>
         </item>
@@ -60,7 +60,7 @@
         <item row="4" column="1">
          <widget class="QDoubleSpinBox" name="qdspbox_prepend">
           <property name="decimals">
-           <number>4</number>
+           <number>5</number>
           </property>
          </widget>
         </item>
@@ -95,7 +95,7 @@
         <item row="5" column="1">
          <widget class="QDoubleSpinBox" name="qdspbox_append">
           <property name="decimals">
-           <number>4</number>
+           <number>5</number>
           </property>
          </widget>
         </item>
@@ -118,7 +118,7 @@
         <item row="2" column="1">
          <widget class="QDoubleSpinBox" name="qdspbox_scaleFrom">
           <property name="decimals">
-           <number>4</number>
+           <number>5</number>
           </property>
          </widget>
         </item>
@@ -132,7 +132,7 @@
         <item row="3" column="1">
          <widget class="QDoubleSpinBox" name="qdspbox_scaleTo">
           <property name="decimals">
-           <number>4</number>
+           <number>5</number>
           </property>
          </widget>
         </item>
