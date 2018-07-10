@@ -1,8 +1,9 @@
 import sys
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QDialog
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, Qt
 from forms.cropscalewidget import Ui_CropScaleWidget
 from cropscalepack import CropScalePack
+from ui.shiftaxisdialog import ShiftAxisDialog
 
 
 class CropScaleWidget(QWidget, Ui_CropScaleWidget):
@@ -32,6 +33,24 @@ class CropScaleWidget(QWidget, Ui_CropScaleWidget):
     def _onScaleToReset(self):
         self.qdspbox_scaleTo.setValue(self._defaultXLast)
         self._sendCropScalePack()
+
+    @pyqtSlot()
+    def _onShiftXAxisClicked(self):
+        dlg = ShiftAxisDialog(self)
+
+        if dlg.exec_() == QDialog.Accepted:
+            shift = dlg.shift.new - dlg.shift.reference
+
+            fv = self.qdspbox_scaleFrom.value()
+            tv = self.qdspbox_scaleTo.value()
+
+            print(fv, tv, shift)
+
+            self.qdspbox_scaleFrom.setValue(fv + shift)
+            self.qdspbox_scaleTo.setValue(tv + shift)
+            self.qcb_enableScaling.setChecked(True)
+
+            self._onEnableScalingToggled(True)
 
     @pyqtSlot(float)
     def _onSpinboxValueChanged(self, value):
@@ -118,6 +137,8 @@ class CropScaleWidget(QWidget, Ui_CropScaleWidget):
         self.qdspbox_append.valueChanged.connect(self._onSpinboxValueChanged)
         self.qdspbox_scaleFrom.valueChanged.connect(self._onSpinboxValueChanged)
         self.qdspbox_scaleTo.valueChanged.connect(self._onSpinboxValueChanged)
+
+        self.qpb_shiftXAxis.clicked.connect(self._onShiftXAxisClicked)
 
     cropScaleParamsChanged = pyqtSignal(CropScalePack)
 

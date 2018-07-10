@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'cropscalewidget.ui'
 #
-# Created by: PyQt5 UI code generator 5.10
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -87,6 +87,9 @@ class Ui_CropScaleWidget(object):
         self.ql_scaleFrom = QtWidgets.QLabel(self.qgbox_scale)
         self.ql_scaleFrom.setObjectName("ql_scaleFrom")
         self.gridLayout_2.addWidget(self.ql_scaleFrom, 2, 0, 1, 1)
+        self.qpb_shiftXAxis = QtWidgets.QPushButton(self.qgbox_scale)
+        self.qpb_shiftXAxis.setObjectName("qpb_shiftXAxis")
+        self.gridLayout_2.addWidget(self.qpb_shiftXAxis, 4, 2, 1, 1)
         self.verticalLayout_2.addWidget(self.qgbox_scale)
         self.verticalLayout.addLayout(self.verticalLayout_2)
 
@@ -108,4 +111,5 @@ class Ui_CropScaleWidget(object):
         self.qpb_resetScaleTo.setText(_translate("CropScaleWidget", "Reset"))
         self.ql_scaleTo.setText(_translate("CropScaleWidget", "To"))
         self.ql_scaleFrom.setText(_translate("CropScaleWidget", "From"))
+        self.qpb_shiftXAxis.setText(_translate("CropScaleWidget", "Shift X axis"))
 
