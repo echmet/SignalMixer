@@ -4,7 +4,13 @@ import simplemixercommon
 
 class SimpleInterpolatingMixer(abstractmixer.AbstractMixer):
     def description(self):
-        return 'Simple mixing with interpolation of Y values. Uneven X-axis sampling should be expected.'
+        s = ('Simple mixing with interpolation of Y-axis values. Uneven X-axis sampling should be expected.\n\n'
+             'All X-axis values of all loaded signals are retained and ordered in ascending order. '
+             'Y axis values of signals with lower sampling rate are interpolated to eliminate "stair-shape" '
+             'looking output.\n\n'
+             'This is the recommended mixer to use to merge signals acquired with different sampling rates.')
+
+        return s
 
     def mix(self, signalTraces):
         if len(signalTraces) < 1:
