@@ -16,8 +16,21 @@ class DBusReplyError(SignalTraceLoaderError):
 
 
 class SignalTraceLoaderDBus(SignalTraceLoader):
-    DBUS_SERVICE_NAME = 'cz.cuni.natur.echmet.ceval.dataloader'
-    DBUS_OBJECT_PATH = '/DataLoader'
+    DBUS_SERVICE_NAME = 'cz.cuni.natur.echmet.edii'
+    DBUS_OBJECT_PATH = '/EDII'
+
+    ABI_VERSION_MAJOR = 0
+    ABI_VERSION_MINOR = 1
+
+    def _fetchABIVersion(self):
+        msg = self._dbusIface.call('abiVersion')
+        if msg.type() != QDBusMessage.ReplyMessage:
+            raise DBusReplyError('Invalid reply to abiVersion request')
+
+        if len(msg.arguments()) != 1:
+            raise DBusReplyError('Invalid reply length to abiVersion request')
+
+        return msg.arguments()[0]
 
     def _fetchSupportedFormats(self):
         msg = self._dbusIface.call('supportedFileFormats')
@@ -91,6 +104,11 @@ class SignalTraceLoaderDBus(SignalTraceLoader):
         self._dbusIface = QDBusInterface(SignalTraceLoaderDBus.DBUS_SERVICE_NAME, SignalTraceLoaderDBus.DBUS_OBJECT_PATH, '')
         if not self._dbusIface.isValid():
             raise DBusInterfaceError('DBus interface is invalid')
+
+        abiVersion = self._fetchABIVersion()
+
+        if abiVersion[0] != self.ABI_VERSION_MAJOR or abiVersion[1] != self.ABI_VERSION_MINOR:
+            raise DBusInterfaceError('Incompatible version od DBus interface ABI {}.{}'.format(abiVersion[0], abiVersion[1]))
 
         self._supportedFileFormats = self._fetchSupportedFormats()
         self._dbusIface.setTimeout(600000)

@@ -1,11 +1,35 @@
 #! /usr/bin/python3
+
 import sys
 from signaltraceloader import SignalTraceLoaderError
 import signaltraceloaderfactory
-from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMessageBox, QDialog, QFileDialog
 from ui.mainwindow import MainWindow
 from signaltracemodel import SignalTraceModel
+from configuration import Configuration
 import loaderlauncher
+import os.path
+
+
+def check_edii_valid(config):
+    path = config.get_value('edii_path')
+
+    if path is None or os.path.isfile(path + '/bin/EDIICore') is False:
+        return False
+
+    return True
+
+
+def set_edii_path(config):
+    dlg = QFileDialog(None, 'Set path to EDII service', config.get_value('edii_path'))
+    dlg.setAcceptMode(QFileDialog.AcceptOpen)
+    dlg.setOptions(QFileDialog.ShowDirsOnly | QFileDialog.ReadOnly)
+
+    ret = dlg.exec_()
+    if ret != QDialog.Accepted:
+        return
+
+    config.set_value('edii_path', dlg.selectedFiles()[0])
 
 
 def main(argv):
@@ -13,17 +37,39 @@ def main(argv):
     sigLoader = None
     supportedFileFormats = None
     sigModel = SignalTraceModel()
+    ldrLauncher = loaderlauncher.LoaderLauncher()
 
-    ldrPath = argv[1] if len(argv) > 1 else ''
+    config = Configuration()
 
-    ldrLauncher = loaderlauncher.LoaderLauncher(ldrPath)
-
-    try:
-        ldrLauncher.launch()
-    except loaderlauncher.LoaderLauncherError as ex:
-        mbox = QMessageBox(QMessageBox.Critical, 'Loader service error', str(ex))
+    if check_edii_valid(config) is False:
+        mbox = QMessageBox(QMessageBox.Information,
+                           'Incomplete configuration',
+                           ('Path to EDII (ECHMET Data Import Infrastructure) is not set. '
+                            'Please set the path now.'))
         mbox.exec_()
-        sys.exit(1)
+        set_edii_path(config)
+        print(config.get_value('edii_path'))
+
+    while True:
+        try:
+            ldrLauncher.launch(config.get_value('edii_path'))
+            break
+        except loaderlauncher.LoaderLauncherError as ex:
+            mbox = QMessageBox(QMessageBox.Critical, 'EDII service error', str(ex))
+            mbox.exec_()
+
+            mbox = QMessageBox(QMessageBox.Question,
+                               'Update configuration',
+                               ('Would you like to set a different path to EDII service '
+                                'directory and try again?'),
+                               QMessageBox.Yes | QMessageBox.No)
+            ret = mbox.exec_()
+
+            if ret == QMessageBox.Yes:
+                set_edii_path(config)
+                continue
+
+            sys.exit(1)
 
     try:
         sigLoader = signaltraceloaderfactory.makeSignalLoaderDelegate(ldrLauncher)
@@ -42,6 +88,7 @@ def main(argv):
 
     ret = qApp.exec_()
     ldrLauncher.terminate()
+    config.save()
 
     return ret
 

@@ -16,34 +16,12 @@ class LoaderLauncherError(Exception):
 
 
 class LoaderLauncher:
-    def __init__(self, loaderpath=''):
+    def __init__(self):
         self._ldrProcess = QProcess()
 
-        ostype = platform.system()
-        if len(loaderpath) < 1:
-            if ostype == 'Linux':
-                prefix = os.path.realpath(os.getcwd())
+    def launch(self, loaderpath):
+        self._setup_path(loaderpath)
 
-                self._ldrProcess.setProgram(prefix + '/loader/CEvalEFGLoader')
-                self._ldrProcess.setWorkingDirectory(prefix + '/loader')
-
-                print(self._ldrProcess.program())
-            elif ostype == 'Windows':
-                self._ldrProcess.setProgram('loader/CEvalEFGLoader.exe')
-                self._ldrProcess.setWorkingDirectory('loader/')
-            else:
-                raise LoaderLauncherError('Unsupported platform')
-        else:
-            path = ''
-            if not os.path.isabs(loaderpath):
-                path = os.path.abspath(loaderpath)
-            else:
-                path = loaderpath
-
-            self._ldrProcess.setProgram(path)
-            self._ldrProcess.setWorkingDirectory(os.path.dirname(path))
-
-    def launch(self):
         try:
             if signaltraceloaderfactory.serviceAvailable():
                 return
@@ -52,8 +30,28 @@ class LoaderLauncher:
 
         self._ldrProcess.start()
         if not self._ldrProcess.waitForStarted(2000):
-            raise LoaderLauncherError('Cannot launch loader service')
+            raise LoaderLauncherError('Cannot launch loader service: ' + self._ldrProcess.errorString())
         time.sleep(0.25)
+
+    def _setup_path(self, loaderpath):
+        if isinstance(loaderpath, str) is False:
+            raise LoaderLauncherError('Invalid path to EDII service')
+
+        exe_suffix = ''
+        ostype = platform.system()
+        if ostype == 'Windows':
+            exe_suffix = '.exe'
+
+        path = ''
+        if not os.path.isabs(loaderpath):
+            path = os.path.abspath(loaderpath)
+        else:
+            path = loaderpath
+
+        exe_path = path + '/bin/EDIICore' + exe_suffix
+
+        self._ldrProcess.setProgram(exe_path)
+        self._ldrProcess.setWorkingDirectory(path + '/bin')
 
     def terminate(self):
         self._ldrProcess.terminate()
