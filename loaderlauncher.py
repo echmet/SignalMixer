@@ -16,6 +16,30 @@ class LoaderLauncherError(Exception):
 
 
 class LoaderLauncher:
+    BIN_PREFIX = '/bin/'
+    EXE_NAME = 'EDIICore'
+
+    @staticmethod
+    def check_edii_path(path):
+        return os.path.isfile(LoaderLauncher.make_path(path))
+
+    @staticmethod
+    def default_path():
+        return os.getcwd() + '/EDII'
+
+    @staticmethod
+    def exe_suffix():
+        ostype = platform.system()
+        if ostype == 'Windows':
+            return '.exe'
+        else:
+            return ''
+
+    @staticmethod
+    def make_path(path):
+        return (path + LoaderLauncher.BIN_PREFIX + LoaderLauncher.EXE_NAME
+                     + LoaderLauncher.exe_suffix())
+
     def __init__(self):
         self._ldrProcess = QProcess()
 
@@ -37,21 +61,16 @@ class LoaderLauncher:
         if isinstance(loaderpath, str) is False:
             raise LoaderLauncherError('Invalid path to EDII service')
 
-        exe_suffix = ''
-        ostype = platform.system()
-        if ostype == 'Windows':
-            exe_suffix = '.exe'
-
         path = ''
         if not os.path.isabs(loaderpath):
             path = os.path.abspath(loaderpath)
         else:
             path = loaderpath
 
-        exe_path = path + '/bin/EDIICore' + exe_suffix
+        exe_path = LoaderLauncher.make_path(path)
 
         self._ldrProcess.setProgram(exe_path)
-        self._ldrProcess.setWorkingDirectory(path + '/bin')
+        self._ldrProcess.setWorkingDirectory(path + LoaderLauncher.BIN_PREFIX)
 
     def terminate(self):
         self._ldrProcess.terminate()

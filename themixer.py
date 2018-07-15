@@ -7,21 +7,21 @@ from PyQt5.QtWidgets import QApplication, QMessageBox, QDialog, QFileDialog
 from ui.mainwindow import MainWindow
 from signaltracemodel import SignalTraceModel
 from configuration import Configuration
-import loaderlauncher
-import os.path
+from loaderlauncher import LoaderLauncher, LoaderLauncherError
 
 
 def check_edii_valid(config):
     path = config.get_value('edii_path')
 
-    if path is None or os.path.isfile(path + '/bin/EDIICore') is False:
+    if path is None:
         return False
 
-    return True
+    return LoaderLauncher.check_edii_path(path)
 
 
 def set_edii_path(config):
-    dlg = QFileDialog(None, 'Set path to EDII service', config.get_value('edii_path'))
+    dlg = QFileDialog(None, 'Set path to EDII service',
+                      config.get_value('edii_path'))
     dlg.setAcceptMode(QFileDialog.AcceptOpen)
     dlg.setOptions(QFileDialog.ShowDirsOnly | QFileDialog.ReadOnly)
 
@@ -37,31 +37,41 @@ def main(argv):
     sigLoader = None
     supportedFileFormats = None
     sigModel = SignalTraceModel()
-    ldrLauncher = loaderlauncher.LoaderLauncher()
+    ldrLauncher = LoaderLauncher()
 
     config = Configuration()
 
     if check_edii_valid(config) is False:
         mbox = QMessageBox(QMessageBox.Information,
                            'Incomplete configuration',
-                           ('Path to EDII (ECHMET Data Import Infrastructure) is not set. '
-                            'Please set the path now.'))
-        mbox.exec_()
-        set_edii_path(config)
-        print(config.get_value('edii_path'))
+                           ('Path to ECHMET Data Import Infrastructure (EDII) '
+                            'service has not been set. '
+                            'This service is necessary for SigMix to load '
+                            'experimental data and SigMix cannot function '
+                            'without it.\n\n'
+                            'Unless you have a reason to set the path '
+                            'manually default path should be safe to use.'))
+        mbox.addButton('Use default path', QMessageBox.YesRole)
+        mbox.addButton('Set path manually', QMessageBox.NoRole)
+        if mbox.exec_() == QDialog.Accepted:
+            set_edii_path(config)
+        else:
+            config.set_value('edii_path', LoaderLauncher.default_path())
 
     while True:
         try:
             ldrLauncher.launch(config.get_value('edii_path'))
             break
-        except loaderlauncher.LoaderLauncherError as ex:
-            mbox = QMessageBox(QMessageBox.Critical, 'EDII service error', str(ex))
+        except LoaderLauncherError as ex:
+            mbox = QMessageBox(QMessageBox.Critical, 'EDII service error',
+                               str(ex))
             mbox.exec_()
 
             mbox = QMessageBox(QMessageBox.Question,
-                               'Update configuration',
-                               ('Would you like to set a different path to EDII service '
-                                'directory and try again?'),
+                               'Invalid configuration',
+                               ('SigMix was unable to start EDII service. '
+                                'Would you like to set a different path to '
+                                'the EDII service and try again?'),
                                QMessageBox.Yes | QMessageBox.No)
             ret = mbox.exec_()
 
