@@ -2,7 +2,7 @@ from signaltraceloader import SignalTraceLoader, SignalTraceLoaderError, Support
 from PyQt5.QtDBus import QDBusConnection, QDBusInterface, QDBusMessage
 from signaltrace import SignalTrace
 from datapoint import Datapoint
-from loaderlauncher import LoaderLauncherError
+from loaderlauncher import EDIIConnectionError, EDIIStartError
 
 
 class DBusInterfaceError(SignalTraceLoaderError):
@@ -69,8 +69,10 @@ class SignalTraceLoaderDBus(SignalTraceLoader):
     def loadSignal(self, tag, option, hintpath):
         if not SignalTraceLoaderDBus.serviceAvailable():
             try:
-                self._loaderLauncher.launch()
-            except LoaderLauncherError:
+                self._loaderLauncher.launchIfNeeded()
+            except EDIIConnectionError:
+                return []
+            except EDIIStartError:
                 return []
 
         msg = None

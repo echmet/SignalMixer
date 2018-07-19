@@ -5,7 +5,7 @@ import platform
 import struct
 import signaltrace
 import datapoint
-from loaderlauncher import LoaderLauncherError
+from loaderlauncher import EDIIConnectionError, EDIIStartError
 
 
 class LocalSocketError(SignalTraceLoaderError):
@@ -75,8 +75,10 @@ class SignalTraceLoaderLocalSocket(SignalTraceLoader):
     def _connectSocket(self):
         if not SignalTraceLoaderLocalSocket.serviceAvailable():
             try:
-                self._loaderLauncher.launch()
-            except LoaderLauncherError:
+                self._loaderLauncher.launchIfNeeded()
+            except EDIIConnectionError:
+                return False
+            except EDIIStartError:
                 return False
 
         MAX = 24

@@ -5,9 +5,10 @@ from signaltraceloader import SignalTraceLoaderError
 import signaltraceloaderfactory
 from PyQt5.QtWidgets import QApplication, QMessageBox, QDialog, QFileDialog
 from ui.mainwindow import MainWindow
+from ui.ediiconnectionerrordialog import EDIIConnectionErrorDialog
 from signaltracemodel import SignalTraceModel
 from configuration import Configuration
-from loaderlauncher import LoaderLauncher, LoaderLauncherError
+from loaderlauncher import LoaderLauncher, EDIIConnectionError, EDIIStartError
 
 
 def check_edii_valid(config):
@@ -60,16 +61,13 @@ def main(argv):
 
     while True:
         try:
-            ldrLauncher.launch(config.get_value('edii_path'))
+            ldrLauncher.launchIfNeeded(config.get_value('edii_path'))
             break
-        except LoaderLauncherError as ex:
-            mbox = QMessageBox(QMessageBox.Critical, 'EDII service error',
-                               str(ex))
-            mbox.exec_()
-
+        except EDIIStartError as ex:
             mbox = QMessageBox(QMessageBox.Question,
-                               'Invalid configuration',
-                               ('SigMix was unable to start EDII service. '
+                               'Cannot start EDII service',
+                               ('SigMix was unable to start the EDII service.\n'
+                                'Error reported: ' + str(ex) + '\n'
                                 'Would you like to set a different path to '
                                 'the EDII service and try again?'),
                                QMessageBox.Yes | QMessageBox.No)
@@ -78,6 +76,11 @@ def main(argv):
             if ret == QMessageBox.Yes:
                 set_edii_path(config)
                 continue
+
+            sys.exit(1)
+        except EDIIConnectionError as ex:
+            dlg = EDIIConnectionErrorDialog(str(ex))
+            dlg.exec_()
 
             sys.exit(1)
 

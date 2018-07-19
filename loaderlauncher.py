@@ -6,13 +6,22 @@ import signaltraceloaderfactory
 import signaltraceloader
 
 
-class LoaderLauncherError(Exception):
+class EDIIStartError(Exception):
     def __init__(self, message):
-        super().__init__()
-        self._message = message
+        super()
+        self.message = message
 
     def __str__(self):
-        return self._message
+        return self.message
+
+
+class EDIIConnectionError(Exception):
+    def __init__(self, message):
+        super()
+        self.message = message
+
+    def __str__(self):
+        return self.message
 
 
 class LoaderLauncher:
@@ -43,23 +52,29 @@ class LoaderLauncher:
     def __init__(self):
         self._ldrProcess = QProcess()
 
-    def launch(self, loaderpath):
+    def launchIfNeeded(self, loaderpath):
         self._setup_path(loaderpath)
 
         try:
             if signaltraceloaderfactory.serviceAvailable():
                 return
         except signaltraceloader.SignalTraceLoaderError as ex:
-            raise LoaderLauncherError(str(ex))
+            raise EDIIConnectionError(str(ex))
 
         self._ldrProcess.start()
         if not self._ldrProcess.waitForStarted(2000):
-            raise LoaderLauncherError('Cannot launch loader service: ' + self._ldrProcess.errorString())
+            raise EDIIStartError(self._ldrProcess.errorString())
         time.sleep(0.25)
+
+        try:
+            if not signaltraceloaderfactory.serviceAvailable():
+                raise EDIIConnectionError('EDII service is not available')
+        except signaltraceloader.SignalTraceLoaderError as ex:
+            raise EDIIConnectionError(str(ex))
 
     def _setup_path(self, loaderpath):
         if isinstance(loaderpath, str) is False:
-            raise LoaderLauncherError('Invalid path to EDII service')
+            raise EDIIStartError('Invalid path to EDII service')
 
         path = ''
         if not os.path.isabs(loaderpath):
