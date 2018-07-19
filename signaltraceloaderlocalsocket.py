@@ -1,4 +1,4 @@
-from signaltraceloader import SignalTraceLoader, SignalTraceLoaderError, SupportedFileFormat, LoadingOption
+from signaltraceloader import SignalTraceLoader, SignalTraceLoaderError, SupportedFileFormat, LoadingOption, NoDataError
 from PyQt5.QtNetwork import QLocalSocket
 import time
 import platform
@@ -60,7 +60,7 @@ class SignalTraceLoaderLocalSocket(SignalTraceLoader):
     LDMODE_LOAD_INTERACTIVE = 1
     LDMODE_LOAD_HINT = 2
     LDMODE_LOAD_FILE = 3
-       
+
     PACKET_MAGIC = 0x091E
     SOCKET_NAME = 'echmet_edii_socket'
 
@@ -70,6 +70,8 @@ class SignalTraceLoaderLocalSocket(SignalTraceLoader):
 
         if response[4] > 0:
             err = self._readStringBlock(response[4])
+            if err == 'No data was loaded':
+                raise NoDataError()
             raise LoadingServiceError(err)
 
     def _connectSocket(self):

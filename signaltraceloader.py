@@ -10,6 +10,15 @@ class SignalTraceLoaderError(Exception):
     def __str__(self):
         return self._message
 
+
+class NoDataError(Exception):
+    def __init__(self):
+        super()
+
+    def __str__(self):
+        return 'Loading service did not send any data'
+
+
 LoadingOption = namedtuple('LoadingOption', ['index', 'name'])
 SupportedFileFormat = namedtuple('SupportedFileFormat', ['tag', 'shortDescription', 'longDescription', 'loadingOptions'])
 

@@ -1,4 +1,4 @@
-from signaltraceloader import SignalTraceLoader, SignalTraceLoaderError, SupportedFileFormat, LoadingOption
+from signaltraceloader import SignalTraceLoader, SignalTraceLoaderError, SupportedFileFormat, LoadingOption, NoDataError
 from PyQt5.QtDBus import QDBusConnection, QDBusInterface, QDBusMessage
 from signaltrace import SignalTrace
 from datapoint import Datapoint
@@ -89,7 +89,7 @@ class SignalTraceLoaderDBus(SignalTraceLoader):
         payload = msg.arguments()[0]
 
         if payload[0] is False:
-            return False
+            raise NoDataError()
 
         signals = []
         for block in payload[2]:
