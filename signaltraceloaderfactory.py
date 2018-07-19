@@ -1,8 +1,8 @@
 import platform
 from signaltrace import SignalTrace, InvalidSignalError
 from signaltraceloader import SignalTraceLoaderError
-import signaltraceloaderdbus
-import signaltraceloaderlocalsocket
+from signaltraceloaderdbus import SignalTraceLoaderDBus
+from signaltraceloaderlocalsocket import SignalTraceLoaderLocalSocket
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject
 from PyQt5.QtWidgets import QMessageBox
 
@@ -46,9 +46,11 @@ def makeSignalLoaderDelegate(loaderLauncher):
     os = platform.system()
 
     if os == 'Linux':
-        return SignalTraceLoaderDelegate(signaltraceloaderdbus.SignalTraceLoaderDBus(loaderLauncher))
+        if SignalTraceLoaderDBus.serviceAvailable() is True:
+            return SignalTraceLoaderDelegate(SignalTraceLoaderDBus(loaderLauncher))
+        return SignalTraceLoaderDelegate(SignalTraceLoaderLocalSocket(loaderLauncher))
     elif os == 'Windows':
-        return SignalTraceLoaderDelegate(signaltraceloaderlocalsocket.SignalTraceLoaderLocalSocket(loaderLauncher))
+        return SignalTraceLoaderDelegate(SignalTraceLoaderLocalSocket(loaderLauncher))
     else:
         raise UnsupportedPlatformError
 
@@ -57,8 +59,10 @@ def serviceAvailable():
     os = platform.system()
 
     if os == 'Linux':
-        return signaltraceloaderdbus.SignalTraceLoaderDBus.serviceAvailable()
+        if SignalTraceLoaderDBus.serviceAvailable() is True:
+            return True
+        return SignalTraceLoaderLocalSocket.serviceAvailable()
     elif os == 'Windows':
-        return signaltraceloaderlocalsocket.SignalTraceLoaderLocalSocket.serviceAvailable()
+        return SignalTraceLoaderLocalSocket.serviceAvailable()
     else:
         raise UnsupportedPlatformError

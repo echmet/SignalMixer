@@ -82,6 +82,7 @@ def main(argv):
             dlg = EDIIConnectionErrorDialog(str(ex))
             dlg.exec_()
 
+            ldrLauncher.terminate()
             sys.exit(1)
 
     try:

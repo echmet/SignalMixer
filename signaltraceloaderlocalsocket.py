@@ -62,7 +62,7 @@ class SignalTraceLoaderLocalSocket(SignalTraceLoader):
     LDMODE_LOAD_FILE = 3
        
     PACKET_MAGIC = 0x091E
-    SOCKET_NAME = 'cevalefgloader'
+    SOCKET_NAME = 'echmet_edii_socket'
 
     def _checkResponse(self, response):
         if response[2] == self.RES_SUCCESS:
