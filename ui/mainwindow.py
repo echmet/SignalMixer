@@ -10,6 +10,7 @@ from ui.mixedsignalsplot import MixedSignalsPlot
 from ui.aboutdialog import AboutDialog
 from signaltrace import SignalTrace, SignalTraceError
 from cropscalepack import CropScalePack
+from ui.checkforupdatedialog import CheckForUpdateDialog
 import signalmixerfactory
 import ui.selectmixerdialog
 import abstractcocktailwriter
@@ -29,6 +30,10 @@ class MainWindow(QWidget, Ui_MainForm):
     @pyqtSlot()
     def _onActionAboutTriggered(self):
         AboutDialog().exec_()
+
+    @pyqtSlot()
+    def _onActionCheckForUpdateTriggered(self):
+        self.chk_for_upd_dlg.exec_()
 
     @pyqtSlot(bool)
     def _onActionLoad(self, checked):
@@ -124,9 +129,16 @@ class MainWindow(QWidget, Ui_MainForm):
         self._lastLoadedPath = ''
         self.setWindowTitle('SignalMixer {}'.format(softwareinfo.SoftwareInfo.versionString()))
 
-        actionAbout = QAction('About', self)
         menuBar = QMenuBar(self)
-        menuBar.addAction(actionAbout)
+
+        menu_help = QMenu('Help', self)
+        menuBar.addMenu(menu_help)
+
+        action_check_for_update = QAction('Check for update', self)
+        action_about = QAction('About', self)
+
+        menu_help.addAction(action_check_for_update)
+        menu_help.addAction(action_about)
 
         self.layout().insertWidget(0, menuBar)
 
@@ -141,12 +153,19 @@ class MainWindow(QWidget, Ui_MainForm):
 
         self._mixerFactory = signalmixerfactory.SignalMixerFactory()
 
+        self.chk_for_upd_dlg = CheckForUpdateDialog(self)
+
         signalModel.signalLoaded.connect(self.onSignalLoaded)
         self.qpb_exportMixedSignals.clicked.connect(self._onExportMixedSignals)
         self.qpb_quit.clicked.connect(self._onQuitClicked)
-        actionAbout.triggered.connect(self._onActionAboutTriggered)
+        action_about.triggered.connect(self._onActionAboutTriggered)
+        action_check_for_update.triggered.connect(self._onActionCheckForUpdateTriggered)
 
     loadSignal = pyqtSignal(str, int, str)
+
+    def connectUpdater(self, updater):
+        updater.update_check_complete.connect(self.chk_for_upd_dlg.on_update_check_complete)
+        self.chk_for_upd_dlg.check_for_update.connect(updater.check_for_update)
 
     @pyqtSlot(str, CropScalePack)
     def onSignalAdjusted(self, identifier, pack):

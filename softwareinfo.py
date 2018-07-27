@@ -12,5 +12,9 @@ class SoftwareInfo:
         return QPixmap(':/images/res/ECHMET_logo_velke.png')
 
     @staticmethod
+    def softwareName():
+        return 'SigMix'
+
+    @staticmethod
     def versionString():
         return '{:0}.{:1}{:2}'.format(SoftwareInfo.VERSION_MAJ, SoftwareInfo.VERSION_MIN, SoftwareInfo.VERSION_REV)

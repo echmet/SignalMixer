@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#! /usr/bin/env python3
 
 import sys
 from signaltraceloader import SignalTraceLoaderError
@@ -9,6 +9,7 @@ from ui.ediiconnectionerrordialog import EDIIConnectionErrorDialog
 from signaltracemodel import SignalTraceModel
 from configuration import Configuration
 from loaderlauncher import LoaderLauncher, EDIIConnectionError, EDIIStartError
+from softwareupdater import SoftwareUpdater
 
 
 def check_edii_valid(config):
@@ -35,8 +36,10 @@ def set_edii_path(config):
 
 def main(argv):
     qApp = QApplication(argv)
+    sw_updater = SoftwareUpdater()
     sigLoader = None
     supportedFileFormats = None
+
     sigModel = SignalTraceModel()
     ldrLauncher = LoaderLauncher()
 
@@ -98,6 +101,7 @@ def main(argv):
         sys.exit(1)
 
     mWin.loadSignal.connect(sigLoader.onLoadSignal)
+    mWin.connectUpdater(sw_updater)
     mWin.show()
 
     ret = qApp.exec_()
