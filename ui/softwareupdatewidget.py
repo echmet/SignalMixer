@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget
 import forms.softwareupdatewidget
 from softwareinfo import SoftwareInfo
+import html
 
 
 class SoftwareUpdateWidget(QWidget, forms.softwareupdatewidget.Ui_SoftwareUpdateWidget):
@@ -18,9 +19,15 @@ class SoftwareUpdateWidget(QWidget, forms.softwareupdatewidget.Ui_SoftwareUpdate
         self.ql_result.setText(result)
         self.ql_extraInfo.setText(extra_info)
         self.ql_newVersion.setText(ver_str)
-        self.ql_link.setText(link)
+        if len(link) > 1:
+            self.ql_link.setText('<a href="{0}">{0}</a>'.format(html.escape(link)))
+            self.ql_link.setOpenExternalLinks(True)
+        else:
+            self.ql_link.setText(link)
+            self.ql_link.setOpenExternalLinks(False)
 
     def updateInProgress(self):
         self.ql_extraInfo.setText("Checking for update...")
         self.ql_newVersion.setText("")
         self.ql_link.setText("")
+        self.ql_link.setOpenExternalLinks(False)
