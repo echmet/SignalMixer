@@ -3,6 +3,7 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal
 import forms.checkforupdatedialog
 from ui.softwareupdatewidget import SoftwareUpdateWidget
 from softwareinfo import SoftwareInfo
+from softwareupdateresult import SoftwareUpdateResult
 
 
 class CheckForUpdateDialog(QDialog,
@@ -24,21 +25,27 @@ class CheckForUpdateDialog(QDialog,
         self.swuw.updateInProgress()
         self.check_for_update.emit()
 
-    @pyqtSlot(bool, bool, str, tuple, str)
-    def on_update_check_complete(self, check_ok, update_avail, info, version,
-                                 link):
-        if not check_ok:
-            self.swuw.setDisplay("Error occured during update check",
-                                 info,
-                                 "(N/A)", "")
-        else:
-            if not update_avail:
-                self.swuw.setDisplay("{} is up to date".format(SoftwareInfo.softwareName()),
-                                     "", "(none available)", "")
+    @pyqtSlot(SoftwareUpdateResult)
+    def on_update_check_complete(self, result):
+        if result.state != SoftwareUpdateResult.State.NO_ERROR:
+            main_text = ''
+            if result.state == SoftwareUpdateResult.State.NETWORK_ERROR:
+                main_text = 'Network error occured during update check'
+            elif result.state == SoftwareUpdateResult.State.DATA_ERROR:
+                main_text = 'List of updates contains invalid data'
             else:
-                self.swuw.setDisplay("Update for {} is available".format(SoftwareInfo.softwareName()),
-                                     "",
-                                     "{0}.{1}{2}".format(version[0],
-                                                         version[1],
-                                                         version[2]),
-                                     link)
+                main_text = 'Error occured during update check'
+            self.swuw.setDisplay(main_text,
+                                 result.extra_info,
+                                 '(N/A)', '')
+        else:
+            if not result.update_available:
+                self.swuw.setDisplay('{} is up to date'.format(SoftwareInfo.softwareName()),
+                                     '', '(none available)', '')
+            else:
+                self.swuw.setDisplay('Update for {} is available'.format(SoftwareInfo.softwareName()),
+                                     '',
+                                     '{0}.{1}{2}'.format(result.new_ver_maj,
+                                                         result.new_ver_min,
+                                                         result.new_ver_rev),
+                                     result.link)
