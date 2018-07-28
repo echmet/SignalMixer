@@ -1,5 +1,6 @@
 from echmetupdatecheck import ECHMETUpdateCheck
 from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
+from softwareinfo import SoftwareInfo
 
 
 class SoftwareUpdater(QObject):
@@ -10,7 +11,9 @@ class SoftwareUpdater(QObject):
 
     @pyqtSlot()
     def check_for_update(self):
-        success, err, res = self._check_for_update(0, 1, 'c')
+        success, err, res = self._check_for_update(SoftwareInfo.VERSION_MAJ,
+                                                   SoftwareInfo.VERSION_MIN,
+                                                   SoftwareInfo.VERSION_REV)
 
         if not success:
             self.update_check_complete.emit(False, False, err, (), "")
@@ -20,10 +23,10 @@ class SoftwareUpdater(QObject):
                 self.update_check_complete.emit(True, False, "", (), "")
             else:
                 self.update_check_complete.emit(True, True, "",
-                                                (res.version.major,
-                                                 res.version.minor,
-                                                 res.version.revision),
-                                                res.link)
+                                                (res.version.major.value,
+                                                 res.version.minor.value,
+                                                 res.version.revision.decode('ASCII')),
+                                                 res.link)
 
     def _check_for_update(self, ver_maj, ver_min, ver_rev):
         try:
