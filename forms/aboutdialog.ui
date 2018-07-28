@@ -24,7 +24,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Signal mixer</string>
+      <string>&lt;SW_NAME&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
