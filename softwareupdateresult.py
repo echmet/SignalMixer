@@ -12,7 +12,7 @@ class SoftwareUpdateResult:
                  new_ver_maj, new_ver_min, new_ver_rev,
                  link):
         self.state = state
-        self.update_available = update_avail,
+        self.update_available = update_avail
         self.extra_info = extra_info
         self.new_ver_maj = new_ver_maj
         self.new_ver_min = new_ver_min
