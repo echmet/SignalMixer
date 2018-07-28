@@ -65,26 +65,25 @@ class SoftwareUpdater(QObject):
             self.update_check_complete.emit(SoftwareUpdateResult(st, False,
                                                                  self.checker.error_to_str(err),
                                                                  0, 0, '', ''))
+            return
 
+        if res.status == ECHMETUpdateCheck.UpdateState.UP_TO_DATE:
+            self.update_check_complete.emit(SoftwareUpdateResult(SoftwareUpdateResult.State.NO_ERROR,
+                                                                 False,
+                                                                 '',
+                                                                 0, 0, '', ''))
+        elif res.status == ECHMETUpdateCheck.UpdateState.UNKNOWN:
+            self.update_check_complete.emit(SoftwareUpdateResult(SoftwareUpdateResult.State.DATA_ERROR,
+                                                                 False,
+                                                                 self.checker.error_to_str(err),
+                                                                 0, 0, '', ''))
         else:
-            if res.status == ECHMETUpdateCheck.UpdateState.UP_TO_DATE:
-                self.update_check_complete.emit(SoftwareUpdateResult(SoftwareUpdateResult.State.NO_ERROR,
-                                                                     False,
-                                                                     '',
-                                                                     0, 0, '', ''))
-            elif res.status == ECHMETUpdateCheck.UpdateState.UNKNOWN:
-                self.update_check_complete.emit(SoftwareUpdateResult(SoftwareUpdateResult.State.DATA_ERROR,
-                                                                     False,
-                                                                     self.checker.error_to_str(err),
-                                                                     0, 0, '', ''))
-            else:
-                self.update_check_complete.emit(SoftwareUpdateResult(SoftwareUpdateResult.State.NO_ERROR,
-                                                                     True,
-                                                                     '',
-                                                                     res.version.major.value,
-                                                                     res.version.minor.value,
-                                                                     res.version.revision.decode('ASCII'),
-                                                                     res.link))
-
-        if automatic:
-            self.automatic_check_complete.emit()
+            self.update_check_complete.emit(SoftwareUpdateResult(SoftwareUpdateResult.State.NO_ERROR,
+                                                                 True,
+                                                                 '',
+                                                                 res.version.major.value,
+                                                                 res.version.minor.value,
+                                                                 res.version.revision.decode('ASCII'),
+                                                                 res.link))
+            if automatic:
+                self.automatic_check_complete.emit()
