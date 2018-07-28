@@ -1,22 +1,57 @@
 from echmetupdatecheck import ECHMETUpdateCheck
-from PyQt5.QtCore import QObject, pyqtSlot, pyqtSignal
+from PyQt5.QtCore import QObject, QThread, pyqtSlot, pyqtSignal
 from softwareinfo import SoftwareInfo
 from softwareupdateresult import SoftwareUpdateResult
 
+class UpdateWorker(QObject):
+    def __init__(self, checker, automatic, parent=None):
+        super().__init__(parent)
+        self.checker = checker
+        self.automatic = automatic
+
+    update_check_complete = pyqtSignal(tuple, bool)
+
+    @pyqtSlot()
+    def on_check_for_update(self):
+        ret = self._check_for_update()
+        self.update_check_complete.emit(ret, self.automatic)
+
+    def _check_for_update(self):
+        sw = ECHMETUpdateCheck.Software('SignalMixer',
+                                         ECHMETUpdateCheck.Version(SoftwareInfo.VERSION_MAJ,
+                                                                   SoftwareInfo.VERSION_MIN,
+                                                                   SoftwareInfo.VERSION_REV))
+        return self.checker.check('https://devoid-pointer.net/echmet/eupd_manifest.json',
+                                  sw, False)
 
 class SoftwareUpdater(QObject):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.checker = ECHMETUpdateCheck('./libECHMETUpdateCheck.so')
-
+        self.thr = None
+        self.worker = None
 
     update_check_complete = pyqtSignal(SoftwareUpdateResult)
+    automatic_check_complete = pyqtSignal()
 
-    @pyqtSlot()
-    def check_for_update(self):
-        success, err, res = self._check_for_update(SoftwareInfo.VERSION_MAJ,
-                                                   SoftwareInfo.VERSION_MIN,
-                                                   SoftwareInfo.VERSION_REV)
+    @pyqtSlot(bool)
+    def check_for_update(self, automatic):
+        if self.thr is not None and self.thr.isRunning():
+            return
+
+        self.thr = QThread()
+        self.worker = UpdateWorker(self.checker, automatic)
+
+        self.worker.moveToThread(self.thr)
+        self.thr.started.connect(self.worker.on_check_for_update)
+        self.worker.update_check_complete.connect(self._on_update_check_complete)
+        self.worker.update_check_complete.connect(self.thr.quit)
+
+        self.thr.start()
+
+    @pyqtSlot(tuple, bool)
+    def _on_update_check_complete(self, result, automatic):
+        success, err, res = result
 
         if not success:
             st = None
@@ -51,10 +86,5 @@ class SoftwareUpdater(QObject):
                                                                      res.version.revision.decode('ASCII'),
                                                                      res.link))
 
-    def _check_for_update(self, ver_maj, ver_min, ver_rev):
-        sw = ECHMETUpdateCheck.Software('SignalMixer',
-                                         ECHMETUpdateCheck.Version(ver_maj,
-                                                                   ver_min,
-                                                                   ver_rev))
-        return self.checker.check('https://devoid-pointer.net/echmet/eupd_manifest.json',
-                                  sw, False)
+        if automatic:
+            self.automatic_check_complete.emit()

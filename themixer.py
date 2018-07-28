@@ -104,6 +104,8 @@ def main(argv):
     mWin.connectUpdater(sw_updater)
     mWin.show()
 
+    sw_updater.check_for_update(True)
+
     ret = qApp.exec_()
     ldrLauncher.terminate()
     config.save()

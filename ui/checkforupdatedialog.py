@@ -18,12 +18,12 @@ class CheckForUpdateDialog(QDialog,
         self.buttonBox.rejected.connect(self.close)
         self.qpb_checkForUpdate.clicked.connect(self.on_check_for_update)
 
-    check_for_update = pyqtSignal()
+    check_for_update = pyqtSignal(bool)
 
     @pyqtSlot()
     def on_check_for_update(self):
         self.swuw.updateInProgress()
-        self.check_for_update.emit()
+        self.check_for_update.emit(False)
 
     @pyqtSlot(SoftwareUpdateResult)
     def on_update_check_complete(self, result):

@@ -40,6 +40,10 @@ class MainWindow(QWidget, Ui_MainForm):
         data = self.sender().data()
         self.loadSignal.emit(data[0], data[1], self._lastLoadedPath)
 
+    @pyqtSlot()
+    def _onAutomaticUpdateCheckComplete(self):
+        self.chk_for_upd_dlg.exec_()
+
     @pyqtSlot(str, str)
     def _onCustomIDChanged(self, identifier, customID):
         self._signalModel.setCustomSignalID(identifier, customID)
@@ -166,6 +170,7 @@ class MainWindow(QWidget, Ui_MainForm):
     def connectUpdater(self, updater):
         updater.update_check_complete.connect(self.chk_for_upd_dlg.on_update_check_complete)
         self.chk_for_upd_dlg.check_for_update.connect(updater.check_for_update)
+        updater.automatic_check_complete.connect(self._onAutomaticUpdateCheckComplete)
 
     @pyqtSlot(str, CropScalePack)
     def onSignalAdjusted(self, identifier, pack):
