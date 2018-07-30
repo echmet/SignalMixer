@@ -58,7 +58,7 @@ class LoaderLauncher:
 
         if path.endswith(tail):
             return (path, path[:-len(tail)] + LoaderLauncher.BIN_PREFIX)
-        return (path, path + LoaderLauncher.BIN_PREFIX)
+        return (path + tail, path + LoaderLauncher.BIN_PREFIX)
 
     def __init__(self):
         self._ldrProcess = QProcess()
