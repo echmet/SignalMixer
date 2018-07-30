@@ -1,3 +1,4 @@
+import platform
 from echmetupdatecheck import ECHMETUpdateCheck
 from PyQt5.QtCore import QObject, QThread, pyqtSlot, pyqtSignal
 from softwareinfo import SoftwareInfo
@@ -43,7 +44,10 @@ class UpdateWorker(QObject):
 class SoftwareUpdater(QObject):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.checker = ECHMETUpdateCheck('./libECHMETUpdateCheck.so')
+        if platform.system() == 'Windows':
+            self.checker = ECHMETUpdateCheck('./ECHMETUpdateCheck.dll')
+        else:
+            self.checker = ECHMETUpdateCheck('./libECHMETUpdateCheck.so')
         self.thr = None
         self.worker = None
 
