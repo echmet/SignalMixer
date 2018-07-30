@@ -94,7 +94,6 @@ class LoaderLauncher:
             path = loaderpath
 
         exe_path, wd_path = LoaderLauncher.make_paths(path)
-        print(exe_path, wd_path)
 
         self._ldrProcess.setProgram(exe_path)
         self._ldrProcess.setWorkingDirectory(wd_path)
