@@ -30,7 +30,7 @@ class LoaderLauncher:
 
     @staticmethod
     def check_edii_path(path):
-        return os.path.isfile(LoaderLauncher.make_path(path))
+        return os.path.isfile(LoaderLauncher.make_paths(path)[0])
 
     @staticmethod
     def default_path():
@@ -45,9 +45,20 @@ class LoaderLauncher:
             return ''
 
     @staticmethod
-    def make_path(path):
-        return (path + LoaderLauncher.BIN_PREFIX + LoaderLauncher.EXE_NAME
-                     + LoaderLauncher.exe_suffix())
+    def _path_tail():
+        return LoaderLauncher.BIN_PREFIX + LoaderLauncher.EXE_NAME + LoaderLauncher.exe_suffix()
+
+    @staticmethod
+    def make_paths(path):
+        if platform.system() == 'Windows':
+            path = path.lower()
+        tail = LoaderLauncher._path_tail()
+        if platform.system() == 'Windows':
+            tail = tail.lower()
+
+        if path.endswith(tail):
+            return (path, path[:-len(tail)] + LoaderLauncher.BIN_PREFIX)
+        return (path, path + LoaderLauncher.BIN_PREFIX)
 
     def __init__(self):
         self._ldrProcess = QProcess()
@@ -82,10 +93,11 @@ class LoaderLauncher:
         else:
             path = loaderpath
 
-        exe_path = LoaderLauncher.make_path(path)
+        exe_path, wd_path = LoaderLauncher.make_paths(path)
+        print(exe_path, wd_path)
 
         self._ldrProcess.setProgram(exe_path)
-        self._ldrProcess.setWorkingDirectory(path + LoaderLauncher.BIN_PREFIX)
+        self._ldrProcess.setWorkingDirectory(wd_path)
 
     def terminate(self):
         self._ldrProcess.terminate()
