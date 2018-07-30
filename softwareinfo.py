@@ -5,7 +5,7 @@ import sigmixres
 class SoftwareInfo:
     VERSION_MAJ = 0
     VERSION_MIN = 1
-    VERSION_REV = 'c'
+    VERSION_REV = 'c2'
 
     @staticmethod
     def echmetLogo():
